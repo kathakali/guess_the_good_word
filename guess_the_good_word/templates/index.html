@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#123a8c" />
+    <title>Guess the Good Word</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}" />
+    <script defer src="{{ url_for('static', filename='js/app.js') }}"></script>
+  </head>
+  <body data-default-level="{{ default_level }}">
+    <a class="skip-link" href="#game-board">Skip to game board</a>
+
+    <div class="app-shell">
+      <aside class="panel side-panel left-panel">
+        <section class="brand-card" aria-labelledby="app-title">
+          <div class="brand-logo" aria-hidden="true">G</div>
+          <div>
+            <p class="eyebrow">Word game</p>
+            <h1 id="app-title">Guess the Good Word</h1>
+          </div>
+        </section>
+
+        <section class="info-card level-card-wrap" aria-labelledby="levels-heading">
+          <h2 id="levels-heading">Choose level</h2>
+          <p>Pick 3, 4, 5, or 6 letters. Kids levels include hints.</p>
+          <div id="level-list" class="level-list" aria-label="Level choices"></div>
+        </section>
+
+        <section class="info-card color-card" aria-labelledby="rules-heading">
+          <h2 id="rules-heading">Color clues</h2>
+          <div class="legend">
+            <div class="legend-item"><span class="legend-chip correct"></span><span><strong>Dark blue</strong> = correct place.</span></div>
+            <div class="legend-item"><span class="legend-chip present"></span><span><strong>Light blue</strong> = wrong place.</span></div>
+            <div class="legend-item"><span class="legend-chip absent"></span><span><strong>Pink</strong> = not in word.</span></div>
+          </div>
+        </section>
+      </aside>
+
+      <main class="panel game-panel" aria-labelledby="game-heading">
+        <header class="game-header">
+          <div>
+            <p id="level-caption" class="eyebrow">Loading levels</p>
+            <h2 id="game-heading">Guess the Good Word</h2>
+          </div>
+          <div class="button-row">
+            <button id="hint-button" class="button button-secondary" type="button">Hint</button>
+            <button id="new-game-button" class="button button-primary" type="button">New game</button>
+            <button id="share-button" class="button button-secondary" type="button" disabled>Share</button>
+          </div>
+        </header>
+
+        <p id="status-message" class="status-message" role="status" aria-live="polite" aria-atomic="true">Loading...</p>
+
+        <div id="hint-panel" class="hint-panel" hidden>
+          <strong>Hint:</strong> <span id="hint-text"></span>
+        </div>
+
+        <section class="play-area" aria-label="Game board and keyboard">
+          <section id="game-board" class="board" role="grid" aria-label="Letter guess grid"></section>
+          <section id="keyboard" class="keyboard" aria-label="On-screen keyboard"></section>
+        </section>
+      </main>
+
+      <aside class="panel side-panel right-panel">
+        <section class="side-card" aria-labelledby="trail-heading">
+          <p class="eyebrow">This round</p>
+          <h2 id="trail-heading">Guess trail</h2>
+          <ol id="guess-trail" class="guess-trail"></ol>
+        </section>
+
+        <section class="side-card hints-card" aria-labelledby="hints-heading">
+          <p class="eyebrow">Kids hints</p>
+          <h2 id="hints-heading">Hint rules</h2>
+          <p class="muted"><strong>3 letters:</strong> clearer hint with first and last letter.</p>
+          <p class="muted"><strong>4 letters:</strong> vaguer hint about word shape.</p>
+          <p class="muted"><strong>5 and 6 letters:</strong> no hints for the main challenge.</p>
+        </section>
+      </aside>
+    </div>
+
+    <dialog id="result-dialog" class="result-dialog">
+      <form method="dialog" class="dialog-layout">
+        <h2 id="result-title">Game complete</h2>
+        <p id="result-body"></p>
+        <label class="subtle" for="share-output">Share text</label>
+        <textarea id="share-output" readonly></textarea>
+        <div class="button-row end">
+          <button id="copy-result-button" class="button button-secondary" type="button">Copy result</button>
+          <button class="button button-primary" value="close">Close</button>
+        </div>
+      </form>
+    </dialog>
+  </body>
+</html>

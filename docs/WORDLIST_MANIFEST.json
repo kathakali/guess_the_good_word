@@ -1,0 +1,34 @@
+{
+  "answers_3.txt": {
+    "lines": 283,
+    "sha256": "3167949e62a660bd32d0bce5f68e890a35ecbd219c9d25edbc2102a79d3b7e4a"
+  },
+  "answers_4.txt": {
+    "lines": 1000,
+    "sha256": "1d51051cc885c7f6fe9347b3ad368c70d56892ff4f137ade4bb9e543841629eb"
+  },
+  "answers_5.txt": {
+    "lines": 1800,
+    "sha256": "afde9ddce95dd3dacccd2fc151e322d98bfe5e6bcd07535406cbfde605e959ca"
+  },
+  "answers_6.txt": {
+    "lines": 1400,
+    "sha256": "37dace68750e9b491bfc41ad078a92aa22b423451fb6dbd85d7d27ef4e368aec"
+  },
+  "words_3.txt": {
+    "lines": 333,
+    "sha256": "699d5a733da6e166ccf8ee403bb8f5c3154fa42587efdf98ab28957dc9c070de"
+  },
+  "words_4.txt": {
+    "lines": 8000,
+    "sha256": "c573eb2080150893f06086f4755d7bda1a738ef45258694ce1071a32d1f974e9"
+  },
+  "words_5.txt": {
+    "lines": 8000,
+    "sha256": "44e88144c715751d5c914caed116338eb6b6c65de82503024e8a2e7ffa63f1e1"
+  },
+  "words_6.txt": {
+    "lines": 7000,
+    "sha256": "60c7ea17245f47f829a2eb10f4d70f46ab7709b259fd6841b7b1149992ac8aee"
+  }
+}
