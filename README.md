@@ -33,6 +33,10 @@ The app has a simple one-page interface, a QWERTY keyboard, colored clues, curat
 | Word data | Plain `.txt` files inside `guess_the_good_word/data/` |
 | Packaging | `pyproject.toml`, `requirements.txt`, `requirements-dev.txt` |
 
+## Screenshot
+
+![Guess the Good Word screenshot](docs/images/screenshot.png)
+
 ## Project structure
 
 ```text
