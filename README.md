@@ -48,7 +48,9 @@ The frontend uses plain HTML, CSS, and JavaScript; no frontend build step is req
 
 ## Screenshot
 
-![Guess the Good Word screenshot](docs/images/screenshot.png)
+![Guess the Good Word redesigned desktop interface with color-coded guesses, level selection, an on-screen keyboard, and progress stats](docs/images/screenshot.png)
+
+The five-letter main game, showing color clues, the highlighted active row, the on-screen keyboard, and per-level progress.
 
 ## Project structure
 
