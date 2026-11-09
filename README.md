@@ -2,7 +2,7 @@
 
 **Guess the Good Word** is a clean, browser-based word guessing game built with Python Flask, HTML, CSS, and vanilla JavaScript. It supports 3-, 4-, 5-, and 6-letter games, with gentler hint support for kids levels and a more classic challenge for longer words.
 
-The app has a simple one-page interface, a QWERTY keyboard, colored clues, curated answer pools, and separate validation dictionaries. It is lightweight enough to run locally on a school laptop, home desktop, or small development machine.
+The app has a responsive one-page interface, a QWERTY keyboard, colored clues, curated answer pools, and separate validation dictionaries. It is lightweight enough to run locally on a school laptop, home desktop, or small development machine.
 
 ## Features
 
@@ -12,7 +12,20 @@ The app has a simple one-page interface, a QWERTY keyboard, colored clues, curat
 - Broad validation dictionaries and smaller curated answer pools
 - Clean Flask API with a simple HTML/CSS/JavaScript frontend
 - No database required; active games are stored in memory
-- Stats panel removed for a cleaner GitHub-ready version
+- Game-first layout with compact mobile level controls and Help/Stats dialogs
+- Per-level browser stats, visual guess trails, and shareable results
+- Optional clue symbols and reduced-motion support
+
+## Responsive frontend
+
+- The board and keyboard sit together in a responsive game panel. Tiles adapt to the available space, and very short screens can scroll without clipping the game.
+- The active row and next-letter position are highlighted, with numbered attempts and inline progress messages. The 3-letter level uses a split board: attempts 1–5 on the left and 6–10 on the right.
+- Dark blue marks correct positions, light blue marks misplaced letters, and soft pink marks absent letters. Enable **Add symbols to clues** in **How to play** for ✓, ↔, and × alongside color.
+- Stats appear in a desktop sidebar or a mobile dialog. Kids levels include contextual hint guidance.
+- Only the newest guess animates. Input is locked while a guess is checked, and network errors leave the entered word available to retry.
+- Results show the answer, attempts used, and a visual share card, with **Play again**, **Copy result**, and a manual-copy fallback.
+
+The frontend uses plain HTML, CSS, and JavaScript; no frontend build step is required.
 
 ## Levels
 
@@ -67,6 +80,7 @@ guess_the_good_word/
 │   │   ├── words_6.txt
 │   │   └── answers_6.txt
 │   ├── static/
+│   │   ├── favicon.svg
 │   │   ├── css/app.css
 │   │   └── js/app.js
 │   └── templates/

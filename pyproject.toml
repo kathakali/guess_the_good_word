@@ -17,6 +17,7 @@ include = ["guess_the_good_word*"]
 guess_the_good_word = [
   "data/*.txt",
   "templates/*.html",
+  "static/*.svg",
   "static/css/*.css",
   "static/js/*.js",
 ]

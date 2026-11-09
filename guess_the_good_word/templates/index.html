@@ -3,93 +3,176 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#123a8c" />
+    <meta name="theme-color" content="#f5f7fb" />
+    <meta name="description" content="A little wordplay for everyone. Pick a word length, follow the clues, and find the good word." />
     <title>Guess the Good Word</title>
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='favicon.svg') }}" />
     <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}" />
     <script defer src="{{ url_for('static', filename='js/app.js') }}"></script>
   </head>
   <body data-default-level="{{ default_level }}">
     <a class="skip-link" href="#game-board">Skip to game board</a>
 
+    <header class="site-header">
+      <div class="brand">
+        <span class="brand-logo" aria-hidden="true">G<span></span></span>
+        <div>
+          <h1>Guess the Good Word</h1>
+          <p>A little wordplay. A good moment.</p>
+        </div>
+      </div>
+      <nav class="header-actions" aria-label="Game information">
+        <button id="help-button" class="button button-quiet" type="button" aria-haspopup="dialog" aria-controls="help-dialog">
+          <span class="help-icon" aria-hidden="true">?</span> How to play
+        </button>
+        <button id="stats-button" class="button button-quiet mobile-stats-button" type="button" aria-haspopup="dialog" aria-controls="stats-dialog">
+          <svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 16V9m6 7V4m6 12V7" /></svg>
+          Stats
+        </button>
+      </nav>
+    </header>
+
     <div class="app-shell">
-      <aside class="panel side-panel left-panel">
-        <section class="brand-card" aria-labelledby="app-title">
-          <div class="brand-logo" aria-hidden="true">G</div>
-          <div>
-            <p class="eyebrow">Word game</p>
-            <h1 id="app-title">Guess the Good Word</h1>
-          </div>
+      <aside class="left-panel" aria-label="Level selection">
+        <section aria-labelledby="levels-heading">
+          <h2 id="levels-heading" class="section-label">Find your level</h2>
+          <div id="level-list" class="level-list" role="group" aria-label="Choose a word length"></div>
         </section>
 
-        <section class="info-card level-card-wrap" aria-labelledby="levels-heading">
-          <h2 id="levels-heading">Choose level</h2>
-          <p>Pick 3, 4, 5, or 6 letters. Kids levels include hints.</p>
-          <div id="level-list" class="level-list" aria-label="Level choices"></div>
-        </section>
-
-        <section class="info-card color-card" aria-labelledby="rules-heading">
-          <h2 id="rules-heading">Color clues</h2>
+        <section class="desktop-guide" aria-labelledby="clues-heading">
+          <h2 id="clues-heading" class="section-label">Every letter is a clue</h2>
           <div class="legend">
-            <div class="legend-item"><span class="legend-chip correct"></span><span><strong>Dark blue</strong> = correct place.</span></div>
-            <div class="legend-item"><span class="legend-chip present"></span><span><strong>Light blue</strong> = wrong place.</span></div>
-            <div class="legend-item"><span class="legend-chip absent"></span><span><strong>Pink</strong> = not in word.</span></div>
+            <div class="legend-item"><span class="legend-chip correct" aria-hidden="true">✓</span><span><strong>Right spot</strong><small>Right letter, right position.</small></span></div>
+            <div class="legend-item"><span class="legend-chip present" aria-hidden="true">↔</span><span><strong>Move it</strong><small>In the word, somewhere else.</small></span></div>
+            <div class="legend-item"><span class="legend-chip absent" aria-hidden="true">×</span><span><strong>Not in the word</strong><small>Try a different letter.</small></span></div>
           </div>
+          <details class="level-details">
+            <summary>About this level</summary>
+            <p id="level-description"></p>
+            <p id="dictionary-note"></p>
+          </details>
         </section>
       </aside>
 
-      <main class="panel game-panel" aria-labelledby="game-heading">
+      <main class="game-panel" aria-labelledby="game-heading">
         <header class="game-header">
           <div>
-            <p id="level-caption" class="eyebrow">Loading levels</p>
-            <h2 id="game-heading">Guess the Good Word</h2>
+            <h2 id="game-heading">Main game</h2>
+            <p id="level-caption" class="level-caption">Loading your word…</p>
           </div>
-          <div class="button-row">
-            <button id="hint-button" class="button button-secondary" type="button">Hint</button>
-            <button id="new-game-button" class="button button-primary" type="button">New game</button>
-            <button id="share-button" class="button button-secondary" type="button" disabled>Share</button>
+          <div class="button-row game-actions">
+            <button id="hint-button" class="button button-secondary" type="button" aria-expanded="false" aria-controls="hint-panel" hidden>Hint</button>
+            <button id="share-button" class="button button-secondary" type="button" aria-haspopup="dialog" hidden>Result</button>
+            <button id="new-game-button" class="button button-secondary" type="button">
+              <svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16.5 8a6.5 6.5 0 1 0-.6 5M16.5 3v5h-5" /></svg>
+              New game
+            </button>
           </div>
         </header>
 
-        <p id="status-message" class="status-message" role="status" aria-live="polite" aria-atomic="true">Loading...</p>
-
-        <div id="hint-panel" class="hint-panel" hidden>
-          <strong>Hint:</strong> <span id="hint-text"></span>
+        <div id="hint-panel" class="hint-panel" role="note" hidden>
+          <span aria-hidden="true">✦</span>
+          <p><strong>A little help:</strong> <span id="hint-text"></span></p>
         </div>
 
         <section class="play-area" aria-label="Game board and keyboard">
-          <section id="game-board" class="board" role="grid" aria-label="Letter guess grid"></section>
-          <section id="keyboard" class="keyboard" aria-label="On-screen keyboard"></section>
+          <div class="round-progress">
+            <span id="attempt-label" class="attempt-label">Getting ready</span>
+            <p id="status-message" class="status-message" role="status" aria-live="polite" aria-atomic="true">Loading…</p>
+          </div>
+          <div class="board-stage">
+            <div id="game-board" class="board" role="grid" aria-label="Letter guess grid" aria-readonly="true" tabindex="-1"></div>
+          </div>
+          <div class="keyboard-area">
+            <div id="keyboard" class="keyboard" role="group" aria-label="On-screen keyboard"></div>
+            <p class="keyboard-tip">Type on your keyboard or tap the letters <span aria-hidden="true">·</span> Enter to guess</p>
+          </div>
         </section>
+        <noscript><p class="noscript-message">Enable JavaScript to play Guess the Good Word.</p></noscript>
       </main>
 
-      <aside class="panel side-panel right-panel">
-        <section class="side-card" aria-labelledby="trail-heading">
-          <p class="eyebrow">This round</p>
-          <h2 id="trail-heading">Guess trail</h2>
-          <ol id="guess-trail" class="guess-trail"></ol>
-        </section>
+      <aside id="stats-sidebar" class="right-panel" aria-label="Your progress">
+        <div id="stats-content" class="stats-content">
+          <section aria-labelledby="stats-heading">
+            <div class="card-header">
+              <div>
+                <p id="stats-level" class="eyebrow">Main game</p>
+                <h2 id="stats-heading">Your progress</h2>
+              </div>
+              <button id="reset-stats-button" class="text-button" type="button">Reset</button>
+            </div>
+            <dl class="stats-grid">
+              <div class="stat-tile"><dt>Played</dt><dd id="stat-played">0</dd></div>
+              <div class="stat-tile"><dt>Win rate</dt><dd id="stat-win-rate">0%</dd></div>
+              <div class="stat-tile"><dt>Current streak</dt><dd id="stat-streak">0</dd></div>
+              <div class="stat-tile"><dt>Best streak</dt><dd id="stat-best-streak">0</dd></div>
+            </dl>
+            <p class="storage-note">A little better, one word at a time.<br />Stats are saved in this browser.</p>
+          </section>
 
-        <section class="side-card hints-card" aria-labelledby="hints-heading">
-          <p class="eyebrow">Kids hints</p>
-          <h2 id="hints-heading">Hint rules</h2>
-          <p class="muted"><strong>3 letters:</strong> clearer hint with first and last letter.</p>
-          <p class="muted"><strong>4 letters:</strong> vaguer hint about word shape.</p>
-          <p class="muted"><strong>5 and 6 letters:</strong> no hints for the main challenge.</p>
-        </section>
+          <section class="trail-section" aria-labelledby="trail-heading">
+            <h2 id="trail-heading" class="section-label">This round</h2>
+            <p id="trail-empty" class="trail-empty">Your next good word starts with a guess.</p>
+            <ol id="guess-trail" class="guess-trail" aria-label="Submitted guesses"></ol>
+          </section>
+
+          <section id="hint-rules" class="hint-rules" aria-labelledby="hints-heading" hidden>
+            <span class="hint-spark" aria-hidden="true">✦</span>
+            <h2 id="hints-heading">A helping hand</h2>
+            <p id="hint-rule-text"></p>
+          </section>
+        </div>
       </aside>
     </div>
 
-    <dialog id="result-dialog" class="result-dialog">
-      <form method="dialog" class="dialog-layout">
-        <h2 id="result-title">Game complete</h2>
-        <p id="result-body"></p>
-        <label class="subtle" for="share-output">Share text</label>
-        <textarea id="share-output" readonly></textarea>
-        <div class="button-row end">
-          <button id="copy-result-button" class="button button-secondary" type="button">Copy result</button>
-          <button class="button button-primary" value="close">Close</button>
+    <dialog id="help-dialog" class="modal help-dialog" aria-labelledby="help-title">
+      <div class="dialog-layout">
+        <button class="icon-button dialog-close" type="button" data-close-dialog aria-label="Close instructions">×</button>
+        <p class="eyebrow">A little guide</p>
+        <h2 id="help-title">Find the good word.</h2>
+        <p class="dialog-intro">Choose a level, enter a word, and use the clues to make your next guess. Every guess must be in that level’s dictionary.</p>
+        <div class="help-clues">
+          <div><span class="example-tile correct" aria-hidden="true">G<small>✓</small></span><p><strong>Right spot</strong><br />This letter is exactly where it belongs.</p></div>
+          <div><span class="example-tile present" aria-hidden="true">O<small>↔</small></span><p><strong>Move it</strong><br />This letter is in the word, in another spot.</p></div>
+          <div><span class="example-tile absent" aria-hidden="true">D<small>×</small></span><p><strong>Not in the word</strong><br />There isn’t another copy of this letter to find.</p></div>
         </div>
-      </form>
+        <p id="help-level-note" class="help-level-note"></p>
+        <label class="setting-row" for="symbol-mode">
+          <span><strong>Add symbols to clues</strong><small>Show ✓, ↔, and × on tiles and keys, alongside color.</small></span>
+          <input id="symbol-mode" type="checkbox" />
+        </label>
+        <button class="button button-primary full-width" type="button" data-close-dialog>Let’s play</button>
+      </div>
+    </dialog>
+
+    <dialog id="stats-dialog" class="modal stats-dialog" aria-label="Your progress">
+      <div class="dialog-layout">
+        <button class="icon-button dialog-close" type="button" data-close-dialog aria-label="Close stats">×</button>
+        <div id="stats-dialog-content"></div>
+      </div>
+    </dialog>
+
+    <dialog id="result-dialog" class="modal result-dialog" aria-labelledby="result-title" aria-describedby="result-body">
+      <div class="dialog-layout">
+        <button class="icon-button dialog-close" type="button" data-close-dialog aria-label="Close result">×</button>
+        <div id="result-emblem" class="result-emblem" aria-hidden="true">✦</div>
+        <p id="result-kicker" class="eyebrow">That’s a good word</p>
+        <h2 id="result-title">You found it!</h2>
+        <p id="result-answer" class="result-answer"></p>
+        <p id="result-body" class="dialog-intro"></p>
+        <div id="result-grid" class="result-grid" aria-hidden="true"></div>
+        <p id="result-summary" class="result-summary"></p>
+        <div class="result-actions">
+          <button id="play-again-button" class="button button-primary" type="button">Play again</button>
+          <button id="copy-result-button" class="button button-secondary" type="button">Copy result</button>
+        </div>
+        <p id="copy-status" class="copy-status" role="status" aria-live="polite"></p>
+        <details id="share-details" class="share-details">
+          <summary>Preview share text</summary>
+          <label class="sr-only" for="share-output">Share text</label>
+          <textarea id="share-output" readonly spellcheck="false"></textarea>
+        </details>
+      </div>
     </dialog>
   </body>
 </html>
